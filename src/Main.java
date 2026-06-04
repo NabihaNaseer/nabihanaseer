@@ -13,6 +13,7 @@ class Node {
         this.right = null;
     }
 }
+
 public class Main {
 
     static Node root;
@@ -45,5 +46,48 @@ public class Main {
         root.right.data.put("library", "Library timing is 8:00 AM to 8:00 PM.");
         root.right.data.put("transport", "Transport service is available in major city areas.");
         root.right.data.put("scholarship", "Merit scholarships are available for high-achieving students.");
+    }
+
+    static boolean search(Node node, String query) {
+        if (node == null) {
+            return false;
+        }
+
+        for (Map.Entry<String, String> entry : node.data.entrySet()) {
+            if (query.contains(entry.getKey())) {
+                System.out.println("\nBot: " + entry.getValue());
+                return true;
+            }
+        }
+
+        return search(node.left, query) || search(node.right, query);
+    }
+
+    public static void main(String[] args) {
+        buildTree();
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("====================================");
+        System.out.println("     UNIVERSITY FAQ CHATBOT");
+        System.out.println("====================================");
+
+        while (true) {
+            System.out.print("\nYou: ");
+            String query = sc.nextLine().toLowerCase();
+
+            if (query.equals("exit")) {
+                System.out.println("\nBot: Thank you for using the chatbot.");
+                break;
+            }
+
+            boolean found = search(root, query);
+
+            if (!found) {
+                System.out.println("\nBot: Sorry, I could not find information related to your query.");
+            }
+        }
+
+        sc.close();
     }
 }
